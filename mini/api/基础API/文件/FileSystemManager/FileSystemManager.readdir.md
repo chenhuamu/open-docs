@@ -1,11 +1,11 @@
 # 简介
+
 **FileSystemManager.readdir** 读取目录内文件列表。
 
 ## 使用限制
 
 - 基础库 [1.13.0](https://opendocs.alipay.com/mini/framework/lib) 开始支持，低版本需要做 [兼容处理](https://opendocs.alipay.com/mini/framework/compatibility)。
 - 此 API 支持个人支付宝小程序、企业支付宝小程序使用。
-- 使用此 API 前，请先在开放平台控制台 **创建小程序**、**添加能力**，可查看 [接入准备](https://opendocs.alipay.com/mini/02pk4y) 。
 
 # 接口调用
 
@@ -17,10 +17,10 @@
 let fs = my.getFileSystemManager();
 fs.readdir({
   dirPath: `${my.env.USER_DATA_PATH}/newDir`,
-  success: (res) => {
+  success: res => {
     console.log(res);
-  }
-})
+  },
+});
 ```
 
 ## 入参
@@ -38,13 +38,13 @@ Object 类型，参数如下：
 
 success 回调函数会携带一个 Object 类型的对象，其属性如下：
 
-| **属性** | **类型** | **描述** |
-| --- | --- | --- |
-| files | Array\<String\> | 指定目录下的文件名数组。 |
+| **属性** | **类型**        | **描述**                 |
+| -------- | --------------- | ------------------------ |
+| files    | Array\<String\> | 指定目录下的文件名数组。 |
 
 ## 错误码
-| **错误码** | **描述** |
-| --- | --- |
-| 10024 | 指定路径没有读权限。 |
-| 10022 | 目录不存在。 |
 
+| **错误码** | **描述**             |
+| ---------- | -------------------- |
+| 10024      | 指定路径没有读权限。 |
+| 10022      | 目录不存在。         |

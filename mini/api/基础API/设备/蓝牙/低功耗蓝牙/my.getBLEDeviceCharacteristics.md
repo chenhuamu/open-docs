@@ -4,9 +4,9 @@
 
 ## 使用限制
 
-- 支付宝客户端 10.0.18 或更高版本，若版本较低，建议采取 [兼容处理](https://opendocs.alipay.com/mini/framework/compatibility)。
+- 支付宝客户端 10.0.18 或更高版本，若版本较低，建议采取 [兼容处理](https://opendocs.alipay.com/mini/framework/compatibility)。
 - 支持 iOS 客户端，Android 5.0 及以上版本客户端。
-- 建立连接后先执行 [my.getBLEDeviceServices](https://opendocs.alipay.com/mini/api/uzsg75) 与 [my.getBLEDeviceCharacteristics](https://opendocs.alipay.com/mini/api/fmg9gg)，再进行与蓝牙设备的数据交互。
+- 建立连接后先执行 [my.getBLEDeviceServices](https://opendocs.alipay.com/mini/api/uzsg75) 与 [my.getBLEDeviceCharacteristics](https://opendocs.alipay.com/mini/api/fmg9gg)，再进行与蓝牙设备的数据交互。
 - 此 API 暂仅支持企业支付宝小程序使用。
 
 ## 扫码体验
@@ -26,23 +26,25 @@
 ```css
 /* .acss */
 .help-info {
-  padding:10px;
-  color:#000000;
+  padding: 10px;
+  color: #000000;
 }
 .help-title {
-  padding:10px;
-  color:#FC0D1B;
+  padding: 10px;
+  color: #fc0d1b;
 }
 ```
 
 ### .json 示例代码
+
 ```json
 {
-    "defaultTitle": "Bluetooth"
+  "defaultTitle": "Bluetooth"
 }
 ```
 
 ### .axml 示例代码
+
 ```html
 <!-- .axml-->
 <view class="page">
@@ -88,13 +90,13 @@
 ```
 
 ### .js 示例代码
+
 ```javascript
 // .js
 Page({
   data: {
     devid: '0D9C82AD-1CC0-414D-9526-119E08D28124',
     serid: 'FEE7',
-    notifyId: '36F6',
     writeId: '36F5',
     charid: '',
     alldev: [{ deviceId: '' }],
@@ -143,7 +145,7 @@ Page({
     my.startBluetoothDevicesDiscovery({
       allowDuplicatesKey: false,
       success: () => {
-        my.onBluetoothDeviceFound((res) => {
+        my.onBluetoothDeviceFound(res => {
           var deviceArray = res.devices;
           for (var i = deviceArray.length - 1; i >= 0; i--) {
             var deviceObj = deviceArray[i];
@@ -299,7 +301,7 @@ Page({
         my.readBLECharacteristicValue({
           deviceId: this.data.devid,
           serviceId: this.data.serid,
-          characteristicId: this.data.notifyId,
+          characteristicId: this.data.charid,
           //1、安卓读取服务
           // serviceId:'0000180d-0000-1000-8000-00805f9b34fb',
           // characteristicId:'00002a38-0000-1000-8000-00805f9b34fb',
@@ -355,10 +357,10 @@ Page({
           state: true,
           deviceId: this.data.devid,
           serviceId: this.data.serid,
-          characteristicId: this.data.notifyId,
+          characteristicId: this.data.charid,
           success: () => {
             //监听特征值变化的事件
-            my.onBLECharacteristicValueChange((res) => {
+            my.onBLECharacteristicValueChange(res => {
               my.alert({ content: '得到响应数据 = ' + res.value });
             });
             my.alert({ content: '监听成功' });
@@ -375,7 +377,9 @@ Page({
   },
   //其他事件
   bluetoothAdapterStateChange() {
-    my.onBluetoothAdapterStateChange(this.getBind('onBluetoothAdapterStateChange'));
+    my.onBluetoothAdapterStateChange(
+      this.getBind('onBluetoothAdapterStateChange')
+    );
   },
   onBluetoothAdapterStateChange(res) {
     if (res.error) {
@@ -385,7 +389,9 @@ Page({
     }
   },
   offBluetoothAdapterStateChange() {
-    my.offBluetoothAdapterStateChange(this.getBind('onBluetoothAdapterStateChange'));
+    my.offBluetoothAdapterStateChange(
+      this.getBind('onBluetoothAdapterStateChange')
+    );
   },
   getBind(name) {
     if (!this[`bind${name}`]) {
@@ -404,7 +410,9 @@ Page({
     }
   },
   offBLEConnectionStateChanged() {
-    my.offBLEConnectionStateChanged(this.getBind('onBLEConnectionStateChanged'));
+    my.offBLEConnectionStateChanged(
+      this.getBind('onBLEConnectionStateChanged')
+    );
   },
   onUnload() {
     this.offBLEConnectionStateChanged();
@@ -416,11 +424,12 @@ Page({
 ```
 
 ## 入参
+
 Object 类型，参数如下：
 
 | **参数** | **类型** | **必填** | **描述** |
 | --- | --- | --- | --- |
-| deviceId | String | 是 | 蓝牙设备 ID，参考 device 对象。 |
+| deviceId | String | 是 | 蓝牙设备 ID。Android 上为设备 MAC 地址，iOS 上为设备 UUID。 |
 | serviceId | String | 是 | 蓝牙特征值对应 service 的 UUID。 |
 | success | Function | 否 | 调用成功的回调函数。 |
 | fail | Function | 否 | 调用失败的回调函数。 |
@@ -430,26 +439,26 @@ Object 类型，参数如下：
 
 success 回调函数会携带一个 Object 类型的对象，其属性如下：
 
-| **属性** | **类型** | **描述** |
-| --- | --- | --- |
-| characteristics | Array | 设备特征值列。 |
+| **属性**        | **类型** | **描述**       |
+| --------------- | -------- | -------------- |
+| characteristics | Array    | 设备特征值列。 |
 
 #### Array characteristic
 
 蓝牙设备 characteristic （特征值）信息。
 
-| **属性** | **类型** | **描述** |
-| --- | --- | --- |
-| characteristicId | String | 蓝牙设备特征值的 UUID。 |
-| serviceId | String | 蓝牙设备特征值对应服务的 UUID。 |
-| value | Hex String | 蓝牙设备特征值对应的 16 进制值。 |
-| properties | Object | 该特征值支持的操作类型。 |
+| **属性**         | **类型**   | **描述**                         |
+| ---------------- | ---------- | -------------------------------- |
+| characteristicId | String     | 蓝牙设备特征值的 UUID。          |
+| serviceId        | String     | 蓝牙设备特征值对应服务的 UUID。  |
+| value            | Hex String | 蓝牙设备特征值对应的 16 进制值。 |
+| properties       | Object     | 该特征值支持的操作类型。         |
 
 #### Object properties
 
-| **属性** | **类型** | **描述** |
-| --- | --- | --- |
-| read | Boolean | 该特征值是否支持 read 操作。 |
-| write | Boolean | 该特征值是否支持 write 操作。 |
-| notify | Boolean | 该特征值是否支持 notify 操作。 |
-| indicate | Boolean | 该特征值是否支持 indicate 操作。 |
+| **属性** | **类型** | **描述**                         |
+| -------- | -------- | -------------------------------- |
+| read     | Boolean  | 该特征值是否支持 read 操作。     |
+| write    | Boolean  | 该特征值是否支持 write 操作。    |
+| notify   | Boolean  | 该特征值是否支持 notify 操作。   |
+| indicate | Boolean  | 该特征值是否支持 indicate 操作。 |

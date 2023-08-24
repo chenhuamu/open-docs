@@ -1,29 +1,37 @@
 # 简介
+
 **my.onAudioInterruptionBegin** 是监听音频因为系统占用而被中断的开始事件。为异步接口。
 
-更多信息，请查看 [音频播放](https://opendocs.alipay.com/mini/00d6hx)。
+更多信息，可查看 [音频播放 API 使用说明](https://opendocs.alipay.com/mini/03l3fn)。
 
 ## 使用限制
 
 - 基础库 [1.23.4](https://opendocs.alipay.com/mini/framework/lib) 或更高版本；支付宝客户端 10.1.87 或更高版本，若版本较低，建议采取 [兼容处理](https://opendocs.alipay.com/mini/framework/compatibility)。
-- IDE 模拟器暂不支持调试，请以真机调试结果为准。
-- 使用此 API 前，请先在开放平台控制台 **添加能力**，否则将导致音频无法播放，请查看 [接入准备](https://opendocs.alipay.com/mini/02p19p)。
+- 小程序开发者工具（IDE）暂不支持调试此 API，请使用 [真机调试](https://opendocs.alipay.com/mini/ide/remote-debug) 功能在真机进行调试。
 - 此 API 支持个人支付宝小程序、企业支付宝小程序使用。
 
 # 接口调用
 
 ## 示例代码
+
 第一步：开发者可以在 .axml 文件中写入相关的组件（如 button 或者 view）来控制音乐的播放和暂停等，以下示例代码仅供参考：
+
 ```html
 <!--.axml-->
 <view class="operation-item" onTap="play">播放</view>
 <view class="operation-item" onTap="pause">暂停</view>
 <view class="operation-item" onTap="stop">停止</view>
 <view class="operation-item" onTap="seek">播放进度跳转</view>
-<view class="operation-item" onTap="offAudioInterruptionBegin">取消监听音频因为系统占用而被中断的开始事件</view>
-<view class="operation-item" onTap="offAudioInterruptionEnd">取消监听音频被中断的结束事件</view>
+<view class="operation-item" onTap="offAudioInterruptionBegin"
+  >取消监听音频因为系统占用而被中断的开始事件</view
+>
+<view class="operation-item" onTap="offAudioInterruptionEnd"
+  >取消监听音频被中断的结束事件</view
+>
 ```
+
 第二步：开发者获取前景音乐 innerAudioContext 对象后，添加属性并注册对应监听事件。
+
 ```javascript
 //.js
 onLoad() {
@@ -67,7 +75,9 @@ onLoad() {
   });
 },
 ```
+
 第三步：开发者在 .js 文件中写入以下方法，配合上一步的组件，播放音频，以下示例代码仅供参考：
+
 ```js
 //.js
 //播放音乐
@@ -107,8 +117,9 @@ offAudioInterruptionEnd() {
 ```
 
 ## 入参
+
 Object 类型，参数如下：
 
-| **参数** | **类型** | **描述** |
-| --- | --- | --- |
+| **参数** | **类型** | **描述**                                           |
+| -------- | -------- | -------------------------------------------------- |
 | callback | Function | 音频因为受到系统占用而被中断的开始事件的回调函数。 |

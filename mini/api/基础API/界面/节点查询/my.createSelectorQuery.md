@@ -1,10 +1,13 @@
 # 简介
 
-**my.createSelectorQuery** 是用于返回一个 SelectorQuery 对象实例的 API。
+**my.createSelectorQuery** 是返回一个 [SelectorQuery](https://opendocs.alipay.com/mini/api/pc8s51) 对象实例，该实例上有一些用于选择页面节点或获取节点信息的方法。该 API 需要在页面渲染完成后使用。页面渲染完成的时机有：
+- 在 Page.onReady 中，页面处于渲染完成状态。注意：Page.onReady 只会在页面初次渲染完成时触发。
+- 在 Page.onShow 中，页面处于渲染完成状态。
+- 在 setData 回调函数中，页面处于渲染完成状态。
 
 ## 使用限制
 
-- 基础库 [1.4.0](https://opendocs.alipay.com/mini/framework/lib) 或更高版本；支付宝客户端  10.1.8 或更高版本，若版本较低，建议采取 [兼容处理](https://opendocs.alipay.com/mini/framework/compatibility)。
+- 基础库 [1.4.0](https://opendocs.alipay.com/mini/framework/lib) 或更高版本；支付宝客户端 10.1.8 或更高版本，若版本较低，建议采取 [兼容处理](https://opendocs.alipay.com/mini/framework/compatibility)。
 - `my.createSelectorQuery()` 检测渲染层上的所有节点。要限定检测范围，推荐使用 `this.createSelectorQuery()`。详情可查看 [页面运行机制](https://opendocs.alipay.com/mini/framework/page-detail#Page.prototype.createSelectorQuery)。
 - 此 API 支持个人支付宝小程序、企业支付宝小程序使用。
 
@@ -16,48 +19,38 @@
 
 ## 示例
 
-[小程序在线](https://opendocs.alipay.com/examples/dcbbb814-f215-426d-9e11-d59d71e92c35) 
-
-### .axml 示例代码
-
-```html
-<!-- API-DEMO page/API/create-selector-query/create-selector-query.axml-->
-<view class="page">
-  <view class="page-description">节点查询 API</view>
-  <view class="page-section">
-    <view className="all">节点 all1</view>
-    <view className="all">节点 all2</view>
-    <view id="one">节点 one</view>
-    <view id="scroll" style="height:200px;overflow: auto">
-      <view style="height:400px">独立滚动区域</view>
-    </view>
-    <button type="primary" onTap="createSelectorQuery">节点查询</button>
-  </view>
-</view>
-```
+[小程序在线](https://opendocs.alipay.com/openbox/mini/opendocs/create-selector-query?view=preview&defaultPage=pages/index/index&defaultOpenedFiles=pages/index/index&theme=light)
 
 ### .js 示例代码
+
 ```javascript
-// API-DEMO page/API/create-selector-query/create-selector-query.js
 Page({
   createSelectorQuery() {
     my.createSelectorQuery()
-      .select('#non-exists').boundingClientRect()
-      .select('#one').boundingClientRect()
-      .selectAll('.all').boundingClientRect()
-      .select('#scroll').scrollOffset()
-      .selectViewport().boundingClientRect()
-      .selectViewport().scrollOffset().exec((ret) => {
-      console.log(ret);
-      my.alert({
-        content: JSON.stringify(ret, null, 2),
+      .select('#non-exists')
+      .boundingClientRect()
+      .select('#one')
+      .boundingClientRect()
+      .selectAll('.all')
+      .boundingClientRect()
+      .select('#scroll')
+      .scrollOffset()
+      .selectViewport()
+      .boundingClientRect()
+      .selectViewport()
+      .scrollOffset()
+      .exec(ret => {
+        console.log(ret);
+        my.alert({
+          content: JSON.stringify(ret, null, 2),
+        });
       });
-    })
   },
 });
 ```
 
 ### ret 结构
+
 ```json
 [
   null,
@@ -109,4 +102,7 @@ Page({
 ```
 
 ## 返回值
-返回值为 [SelectorQuery](https://opendocs.alipay.com/mini/api/pc8s51)。
+
+返回值为 [SelectorQuery](https://opendocs.alipay.com/mini/api/pc8s51) 对象实例。
+
+

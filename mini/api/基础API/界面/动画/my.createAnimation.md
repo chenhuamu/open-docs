@@ -1,10 +1,10 @@
 # 简介
 
-**my.createAnimation** 是用于创建动画实例 [animation](https://opendocs.alipay.com/mini/api/ui-animation#animation) 的 API。调用实例的方法来描述动画，最后通过动画实例的 `export` 方法将动画数据导出并传递给组件的 `animation` 属性。
+**my.createAnimation** 是用于创建动画实例 [animation](#animation) 的 API。调用实例的方法来描述动画，最后通过动画实例的 `export` 方法将动画数据导出并传递给组件的 `animation` 属性。
 
 ## 使用限制
 
-- 调用 `export` 方法后，之前的动画操作将会被清除。
+- 调用 `export` 方法后，之前的动画操作将会被清除。
 - 此 API 支持个人支付宝小程序、企业支付宝小程序使用。
 
 ## 扫码体验
@@ -15,130 +15,97 @@
 
 ## 示例
 
-[小程序在线](https://opendocs.alipay.com/examples/a93c3d5c-5f48-40dc-88b5-c7135102348d) 
-
-### .json 示例代码
-
-```json
-{
-    "defaultTitle": "Animation"
-}
-```
-
-### .axml 示例代码
-
-```html
-<!-- API-DEMO page/API/animation/animation.axml-->
-<view class="page">
-  <view class="page-description">动画 API</view>
-  <view class="page-section">
-    <view class="page-section-title">my.createAnimation</view>
-    <view class="page-section-demo">
-      <view class="animation-element" animation="{{animation}}"></view>
-    </view>
-    <view class="page-section-btns">
-      <view type="primary" onTap="rotate">旋转</view>
-      <view type="primary" onTap="scale"> 缩放</view>
-      <view type="primary" onTap="translate">移动</view>
-    </view>
-    <view class="page-section-btns">
-      <view type="primary" onTap="skew">倾斜</view>
-      <view type="primary" onTap="rotateAndScale">旋转并缩放</view>
-      <view type="primary" onTap="rotateThenScale">旋转后缩放</view>
-    </view>
-    <view class="page-section-btns">
-      <view type="primary" onTap="all">同时展示全部</view>
-      <view type="primary" onTap="allInQueue">顺序展示全部</view>
-      <view type="primary" onTap="reset">还原</view>
-    </view>
-  </view>
-</view>
-```
+[小程序在线](https://opendocs.alipay.com/openbox/mini/opendocs/animation?view=preview&defaultPage=pages/index/index&defaultOpenedFiles=pages/index/index&theme=light)
 
 ### .js 示例代码
-创建一个设置了动画持续时间、动画效果、动画延迟时间、transform-origin 的动画实例示例：
+
+创建一个设置了动画持续时间、动画效果、动画延迟时间、动画变形原点的动画实例的示例：
+
 ```javascript
 //.js
 const animation = my.createAnimation({
-  transformOrigin: "top right",
+  transformOrigin: 'top right',
   duration: 3000,
-  timeFunction: "ease-in-out",
+  timeFunction: 'ease-in-out',
   delay: 100,
-})
+});
 ```
+
 animation 方法示例：
+
 ```javascript
 // API-DEMO page/API/animation/animation.js
 Page({
   onReady() {
-    this.animation = my.createAnimation()
+    this.animation = my.createAnimation();
   },
   rotate() {
-    this.animation.rotate(Math.random() * 720 - 360).step()
-    this.setData({ animation: this.animation.export() })
+    this.animation.rotate(Math.random() * 720 - 360).step();
+    this.setData({ animation: this.animation.export() });
   },
   scale() {
-    this.animation.scale(Math.random() * 2).step()
-    this.setData({ animation: this.animation.export() })
+    this.animation.scale(Math.random() * 2).step();
+    this.setData({ animation: this.animation.export() });
   },
   translate() {
-    this.animation.translate(Math.random() * 100 - 50, Math.random() * 100 - 50).step()
-    this.setData({ animation: this.animation.export() })
+    this.animation
+      .translate(Math.random() * 100 - 50, Math.random() * 100 - 50)
+      .step();
+    this.setData({ animation: this.animation.export() });
   },
   skew() {
-    this.animation.skew(Math.random() * 90, Math.random() * 90).step()
-    this.setData({ animation: this.animation.export() })
+    this.animation.skew(Math.random() * 90, Math.random() * 90).step();
+    this.setData({ animation: this.animation.export() });
   },
   rotateAndScale() {
-    this.animation.rotate(Math.random() * 720 - 360)
+    this.animation
+      .rotate(Math.random() * 720 - 360)
       .scale(Math.random() * 2)
-      .step()
-    this.setData({ animation: this.animation.export() })
+      .step();
+    this.setData({ animation: this.animation.export() });
   },
   rotateThenScale() {
-    this.animation.rotate(Math.random() * 720 - 360).step()
-      .scale(Math.random() * 2).step()
-    this.setData({ animation: this.animation.export() })
+    this.animation
+      .rotate(Math.random() * 720 - 360)
+      .step()
+      .scale(Math.random() * 2)
+      .step();
+    this.setData({ animation: this.animation.export() });
   },
   all() {
-    this.animation.rotate(Math.random() * 720 - 360)
+    this.animation
+      .rotate(Math.random() * 720 - 360)
       .scale(Math.random() * 2)
       .translate(Math.random() * 100 - 50, Math.random() * 100 - 50)
       .skew(Math.random() * 90, Math.random() * 90)
-      .step()
-    this.setData({ animation: this.animation.export() })
+      .step();
+    this.setData({ animation: this.animation.export() });
   },
   allInQueue() {
-    this.animation.rotate(Math.random() * 720 - 360).step()
-      .scale(Math.random() * 2).step()
-      .translate(Math.random() * 100 - 50, Math.random() * 100 - 50).step()
-      .skew(Math.random() * 90, Math.random() * 90).step()
-    this.setData({ animation: this.animation.export() })
+    this.animation
+      .rotate(Math.random() * 720 - 360)
+      .step()
+      .scale(Math.random() * 2)
+      .step()
+      .translate(Math.random() * 100 - 50, Math.random() * 100 - 50)
+      .step()
+      .skew(Math.random() * 90, Math.random() * 90)
+      .step();
+    this.setData({ animation: this.animation.export() });
   },
   reset() {
-    this.animation.rotate3d(0, 0, 0, 0)
+    this.animation
+      .rotate3d(0, 0, 0, 0)
       .rotateX(0)
       .rotateY(0)
       .rotateZ(0)
       .scale(1)
       .translate(0, 0)
       .skew(0, 0)
-      .step({ duration: 0 })
-    this.setData({ animation: this.animation.export() })
-  }
-})
-```
-
-### .acss 示例代码
-
-```css
-/* API-DEMO page/API/animation/animation.acss */
-.animation-element {
-  width: 200rpx;
-  height: 200rpx;
-  background-color: #108ee9;
-  transform: scaleX(1) scaleY(1);
-}
+      .step({ duration: 0 });
+    this.setData({ animation: this.animation.export() });
+  },
+});
 ```
 
 ## 入参
@@ -148,12 +115,15 @@ Object 类型，参数如下：
 | **参数** | **类型** | **必填** | **描述** |
 | --- | --- | --- | --- |
 | duration | Integer | 否 | 动画的持续时间，单位 ms，默认值 400。 |
-| timeFunction | String | 否 | 定义动画的效果，默认值为 linear。<br />有效值：linear、ease、ease-in、ease-in-out、ease-out、step-start、step-end。 |
+| timeFunction | String | 否 | 定义动画的效果，默认值为 linear。<br />有效值：<ul><li>linear：动画是匀速的</li><li>ease：动画以低速开始，然后加快，在结束前变慢</li><li>lease-in：动画以低速开始</li><li>ease-in-out：动画以低速开始，以低速结束</li><li>ease-out：动画以低速结束</li><li>step-start：动画第一帧就跳至结束状态直到结束</li><li>step-end：动画一直保持开始状态，最后一帧跳到结束状态</li></ul> |
 | delay | Integer | 否 | 动画延迟时间，单位 ms，默认值 0。 |
-| transformOrigin | String | 否 | 设置 transform-origin，默认值为 `50% 50% 0`。 |
-
+| transformOrigin | String | 否 | 设置 transform-origin（动画变形原点），默认值为 `50% 50% 0`，表示坐标轴 xyz 三个方向的值，xy 方向可为 center、top、left、top、bottom 的组合，其他值参考 CSS 动画样式 `transform-origin`|
+ 
+若需要对单个动画设置，可在动画实例描述后调用动画队列 [step](#动画队列) 方法，并传入以上参数。
+ 
 ## animation
-动画实例可以调用以下方法来描述动画，调用结束后会返回实例本身，支持链式调用的写法。view 的 animation 属性初始化为 `{}` 时，在基础库 1.11.0（不包含 1.11.0）及以下版本会报错，建议初始化为 `null`。
+
+my.createAnimation 创建的实例，实例可以调用以下方法来描述动画，调用结束后会返回实例本身，支持链式调用的写法。view 的 animation 属性初始化为 `{}` 时，在基础库 1.11.0（不包含 1.11.0）及以下版本会报错，建议初始化为 `null`。
 
 ### 样式
 
@@ -169,6 +139,7 @@ Object 类型，参数如下：
 | right | length | 设置 right 值：长度值，单位为 px，例如：300 px。 |
 
 ### 旋转
+
 | **方法** | **参数** | **说明** |
 | --- | --- | --- |
 | rotate | deg | deg 范围 -180 ~ 180，从原点顺时针旋转一个 deg 角度。 |
@@ -209,10 +180,10 @@ Object 类型，参数如下：
 
 | **方法** | **参数** | **说明** |
 | --- | --- | --- |
-| matrix | (a,b,c,d,tx,ty) | 同 [transform-function](https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/matrix)。 |
-| matrix3d | (a1, b1, c1, d1, a2, b2, c2, d2, a3, b3, c3, d3, a4, b4, c4, d4) | 同 [transform-function matrix3d](https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/matrix3d)。 |
+| matrix | (a,b,c,d,tx,ty) | 同 [transform-function](https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/matrix)。 |
+| matrix3d | (a1, b1, c1, d1, a2, b2, c2, d2, a3, b3, c3, d3, a4, b4, c4, d4) | 同 [transform-function matrix3d](https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/matrix3d)。 |
 
 ### 动画队列
 
-- 调用动画操作方法后，需调用 `step()` 用于表示一组动画完成，在一组动画中可以调用任意多个动画方法，一组动画中的所有动画会同时开始，当一组动画完成后才会进行下一组动画。
-- `step()` 可以传入一个跟 `my.createAnimation()` 一样的配置参数用于指定当前组动画的配置。
+- 调用动画操作方法后，需调用 `step()` 用于表示一组动画完成，在一组动画中可以调用任意多个动画方法，一组动画中的所有动画会同时开始，当一组动画完成后才会进行下一组动画。
+- `step()` 可以传入一个跟 `my.createAnimation()` 一样的配置参数用于指定当前组动画的配置。

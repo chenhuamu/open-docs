@@ -12,129 +12,121 @@
 
 # 接口调用
 
-## 示例
+## 在线示例
 
-[小程序在线](https://opendocs.alipay.com/examples/156c8058-9de0-4016-bd5c-0999188202a0) 
+[小程序在线](https://opendocs.alipay.com/openbox/mini/opendocs/choose-city?view=preview&defaultPage=pages/index/index&defaultOpenedFiles=pages/index/index&theme=light)
 
-### .axml 示例代码
+## 示例代码
 
-```html
-<!-- API-DEMO page/API/choose-city/choose-city.axml-->
-<view class="page">
-  <view class="page-description">选择城市 API</view>
-  <view class="page-section">
-    <view class="page-section-title">my.chooseCity</view>
-    <view class="page-section-demo">
-      <button type="primary" onTap="chooseCity">选择城市</button>
-    </view>
-  </view>
-  <view class="page-description">修改当前定位城市的名称 API</view>
-  <view class="page-section">
-    <view class="page-section-title">my.setLocatedCity</view>
-    <view class="page-section-demo">
-      <button type="primary" onTap="setLocatedCity">修改当前定位城市的名称</button>
-    </view>
-  </view>
-</view>
-```
-
-### .js 示例代码
-调用时未传入 cities：
+一般使用：
 ```javascript
-// API-DEMO page/choose-city/choose-city.js
-Page({
-  chooseCity() {
-    my.chooseCity({
-      showLocatedCity: true,
-      showHotCities: true,
-      success: (res) => {
-        my.alert({
-          title: 'chooseCity response: ' + JSON.stringify(res),
-        });
-      },
+my.chooseCity({
+  showLocatedCity: true, // 显示当前定位城市
+  showHotCities: true, // 显示热门城市
+  success: res => {
+    my.alert({
+      title: 'chooseCity success',
+      content: JSON.stringify(res),
     });
   },
-  setLocatedCity() {
-    my.onLocatedComplete((res) => {
-      my.setLocatedCity({
-        locatedCityId: res.locatedCityId, //res.locatedCityId
-        locatedCityName: "修改后的城市名",
-        success: (res) => {
-          my.alert({ content: "修改当前定位城市成功" + JSON.stringify(res) });
-        },
-        fail: (error) => {
-          my.alert({
-            content: "修改当前定位城市失败" + JSON.stringify(error),
-          });
-        },
-      });
-    });
-    my.chooseCity({
-      showLocatedCity: true,
-      showHotCities: true,
-      setLocatedCity: true,
-      success: (res) => {
-        my.alert({
-          title: 'chooseCity response: ' + JSON.stringify(res),
-        });
-      },
+  fail: err => {
+    my.alert({
+      title: 'chooseCity fail',
+      content: JSON.stringify(err),
     });
   },
 });
 ```
-调用时传入 cities：
+
+修改当前定位城市名：
+```
+const chooseCityTask = my.chooseCity({
+  showLocatedCity: true, // 显示当前定位城市
+  setLocatedCity: true, // 修改当前定位城市
+  success: res => {
+    my.alert({
+      title: 'chooseCity success',
+      content: JSON.stringify(res),
+    });
+  },
+  fail: err => {
+    my.alert({
+      title: 'chooseCity fail',
+      content: JSON.stringify(err),
+    });
+  },
+});
+// 监听定位完成事件
+chooseCityTask.onLocatedComplete(res => {
+  // 获取定位位置
+  const { longitude, latitude } = res;
+  // 修改默认定位城市名
+  chooseCityTask.setLocatedCity({ locatedCityName: 'New CityName' });
+});
+```
+
+使用自定义城市列表：
 ```javascript
-//.js
 my.chooseCity({
   cities: [
     {
       city: '朝阳区',
       adCode: '110105',
-      spell: 'chaoyang'
+      spell: 'chaoyang',
     },
     {
       city: '海淀区',
       adCode: '110108',
-      spell: 'haidian'
+      spell: 'haidian',
     },
     {
       city: '丰台区',
       adCode: '110106',
-      spell: 'fengtai'
+      spell: 'fengtai',
     },
     {
       city: '东城区',
       adCode: '110101',
-      spell: 'dongcheng'
+      spell: 'dongcheng',
     },
     {
       city: '西城区',
       adCode: '110102',
-      spell: 'xicheng'
+      spell: 'xicheng',
     },
     {
       city: '房山区',
       adCode: '110111',
-      spell: 'fangshan'
-    }
+      spell: 'fangshan',
+    },
   ],
   hotCities: [
     {
       city: '朝阳区',
-      adCode: '110105'
+      adCode: '110105',
+      spell: 'chaoyang',
     },
     {
       city: '海淀区',
-      adCode: '110108'
+      adCode: '110108',
+      spell: 'haidian',
     },
     {
       city: '丰台区',
-      adCode: '110106'
-    }
+      adCode: '110106',
+      spell: 'fengtai',
+    },
   ],
-  success: (res) => {
+  success: res => {
     my.alert({
-      content: res.city + ':' + res.adCode
+      title: 'chooseCity success',
+      content: JSON.stringify(res),
+    });
+  },
+  fail: err => {
+    my.alert({
+      title: 'chooseCity fail',
+      content: JSON.stringify(err),
     });
   },
 });
@@ -149,14 +141,14 @@ Object 类型，参数如下：
 | showLocatedCity | Boolean | 否 | 是否显示当前定位城市，默认 false。 |
 | showHotCities | Boolean | 否 | 是否显示热门城市，默认 true。 |
 | setLocatedCity | Boolean | 否 | 是否修改当前定位城市，默认 false，如果 showLocatedCity 为 false，此设置无效。 |
-| cities | ObjectArray | 否 | 自定义城市列表，列表内对象字段见下方 **ObjectArray cities**。 |
-| hotCities | Object Array | 否 | 自定义热门城市列表，列表内对象字段同 cities。 |
-| customHistoryCities | Object Array | 否 | 自定义历史访问城市列表，列表内对象字段同 cities。 |
+| cities | Array<Object> | 否 | 自定义城市列表，列表内对象字段见下方 **Array<Object> cities**。 |
+| hotCities | Array<Object> | 否 | 自定义热门城市列表，列表内对象字段同 cities。 |
+| customHistoryCities | Array<Object> | 否 | 自定义历史访问城市列表，列表内对象字段同 cities。 |
 | success | Function | 否 | 调用成功的回调函数。 |
 | fail | Function | 否 | 调用失败的回调函数。 |
 | complete | Function | 否 | 调用结束的回调函数（调用成功、失败都会执行）。 |
 
-### ObjectArray cities
+### Array<Object> cities
 
 cities 内对象字段如下所示：
 
@@ -168,8 +160,6 @@ cities 内对象字段如下所示：
 
 ### success 回调函数
 
-**说明**：如果用户没有选择任何城市，直接点击了返回，将不会触发回调函数。
-
 success 回调函数会携带一个 Object 类型的对象，其属性如下：
 
 | **属性** | **类型** | **描述** |
@@ -178,3 +168,19 @@ success 回调函数会携带一个 Object 类型的对象，其属性如下：
 | adCode | String | 行政区划代码。 |
 | longitude | Number | 经度（**注意**：仅用户选择当前定位城市才会返回）。<br />支付宝客户端 10.1.32 及以上版本开始支持。 |
 | latitude | Number | 纬度（**注意**：仅用户选择当前定位城市才会返回）。<br />支付宝客户端 10.1.32 及以上版本开始支持。 |
+
+## 错误码
+
+| **错误码** | **说明**       |
+| ---------- | -------------- |
+| 11         | 用户取消操作。 |
+
+## 返回值
+
+[ChooseCityTask](https://opendocs.alipay.com/mini/04naqz)，可用于监听定位完成事件，以及修改默认定位城市的名称。
+  
+基础库 [2.8.0](https://opendocs.alipay.com/mini/framework/lib-upgrade-v2)、客户端 10.2.70 开始支持，低版本需要做 [兼容处理](https://opendocs.alipay.com/mini/framework/compatibility)。
+
+## Bug & Tip
+
+- 支付宝 10.2.70 以下版本，如果用户没有选择任何城市而直接点击了返回，将不会触发回调函数。

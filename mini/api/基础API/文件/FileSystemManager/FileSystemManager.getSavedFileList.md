@@ -1,11 +1,11 @@
 # 简介
-**FileSystemManager.getSavedFileList** 获取该小程序下已保存的本地缓存文件列表。
+
+**FileSystemManager.getSavedFileList** 获取该小程序下已保存的 [本地缓存文件](https://opendocs.alipay.com/mini/03dt4s#%E6%9C%AC%E5%9C%B0%E7%BC%93%E5%AD%98%E6%96%87%E4%BB%B6) 列表。
 
 ## 使用限制
 
 - 基础库 [1.3.0](https://opendocs.alipay.com/mini/framework/lib) 开始支持，低版本需做 [兼容处理](https://opendocs.alipay.com/mini/framework/compatibility)。
 - 此 API 支持个人支付宝小程序、企业支付宝小程序使用。
-- 使用此 API 前，请先在开放平台控制台 **创建小程序**、**添加能力**，可查看 [接入准备](https://opendocs.alipay.com/mini/02pk4y) 。
 
 # 接口调用
 
@@ -16,9 +16,9 @@
 ```javascript
 let fs = my.getFileSystemManager();
 fs.getSavedFileList({
-  success: (res) => {
-    console.log("从fileList文件数组中取值", res.fileList);
-  }
+  success: res => {
+    console.log('从fileList文件数组中取值', res.fileList);
+  },
 });
 ```
 
@@ -36,14 +36,14 @@ Object 类型，参数如下：
 
 success 回调函数会携带一个 Object 类型的对象，其属性如下：
 
-| **属性** | **类型** | **说明** |
-| --- | --- | --- |
+| **属性** | **类型**        | **说明**   |
+| -------- | --------------- | ---------- |
 | fileList | Array\<Object\> | 文件数组。 |
 
 #### Object fileList
 
 | **属性** | **类型** | **说明** |
 | --- | --- | --- |
-| filePath | String | 本地路径。 |
-| size | Number | 本地文件大小，以字节为单位。 |
+| filePath | String | 文件（[本地缓存文件](https://opendocs.alipay.com/mini/03dt4s#%E6%9C%AC%E5%9C%B0%E7%BC%93%E5%AD%98%E6%96%87%E4%BB%B6) ）路径。 |
+| size | Number | 文件大小，以字节（B）为单位。 |
 | createTime | Number | 文件保存时的时间戳，从 1970/01/01 08:00:00 到当前时间的秒数。 |

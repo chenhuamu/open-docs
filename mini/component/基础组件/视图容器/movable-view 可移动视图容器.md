@@ -1,125 +1,26 @@
 # 简介
-可移动的视图容器，在页面中可以拖拽滑动。movable-view 必须在 [movable-area](https://opendocs.alipay.com/mini/component/movable-area)  组件中，并且必须是直接子节点，否则不能移动。
+
+可移动的视图容器，在页面中可以拖拽滑动。movable-view 必须在 [movable-area](https://opendocs.alipay.com/mini/component/movable-area) 组件中，并且必须是直接子节点，否则不能移动。
 
 ## 使用限制
+
 - 版本要求基础库 1.11.0 及以上，若版本较低，建议做 [兼容处理](https://opendocs.alipay.com/mini/framework/compatibility)。
 - movable-view 必须设置 width 和 height 属性，不设置默认为 10px。
 - movable-view 默认为绝对定位（请不要修改），top 和 left 属性为 0px。
 - 当 movable-view 小于 [movable-area](https://opendocs.alipay.com/mini/component/movable-area) 时，movable-view 的移动范围是在 movable-area 内；当 movable-view 大于 movable-area 时，movable-view 的移动范围必须包含 movable-area （x 轴方向和 y 轴方向分开考虑）。
 
 ## 扫码体验
+
 ![|127x157](https://gw.alipayobjects.com/mdn/rms_d929c6/afts/img/A*V9IxRbitTwkAAAAAAAAAAABjARQnAQ#align=left&display=inline&height=158&margin=%5Bobject%20Object%5D&originHeight=1906&originWidth=1540&status=done&style=none&width=128)
 
 # 使用
 
-## 示例
+## 在线示例
 
-[小程序在线](https://opendocs.alipay.com/examples/feb2372d-8cde-4c45-813e-dceb72240e0d) 
-
-### .json 示例代码
-```json
-// API-DEMO page/component/movable-view.json
-{
-  "allowsBounceVertical": "NO"
-}
-```
-
-### .axml 示例代码
-```html
-// API-DEMO page/component/movable-view.axml
-<view class="page">
-  <view class="page-description">可移动视图</view>
-  <view class="page-section">
-    <view class="page-section-title">movable-view区域小于movable-area</view>
-    <view class="page-section-demo">
-      <movable-area>
-        <movable-view x="{{x}}" y="{{y}}" direction="all">movable-view</movable-view>
-      </movable-area>
-    </view>
-    <button style="margin-left: 10px; mrigin-right: 10px;" type="primary" onTap="onButtonTap">点击移动到 (30px, 30px)</button>
-  </view>
-  <view class="page-section">
-    <view class="page-section-title">movable-view区域大于movable-area</view>
-    <view class="page-section-demo">
-      <movable-area>
-        <movable-view class="max" direction="all">movable-view</movable-view>
-      </movable-area>
-    </view>
-  </view>
-  <view class="page-section">
-    <view class="page-section-title">只可以横向移动</view>
-    <view class="page-section-demo">
-     <movable-area>
-        <movable-view direction="horizontal">
-          movable-view
-        </movable-view>
-      </movable-area>
-    </view>
-  </view>
-  <view class="page-section">
-    <view class="page-section-title">只可以纵向移动</view>
-    <view class="page-section-demo">
-     <movable-area>
-        <movable-view direction="vertical">
-          movable-view
-        </movable-view>
-      </movable-area>
-    </view>
-  </view>
-</view>
-```
-
-### .js 示例代码
-```javascript
-// API-DEMO page/component/movable-view.js
-Page({
-  data: {
-    x: 0,
-    y: 0,
-  },
-  onButtonTap() {
-    const { x, y } = this.data;
-    if (x === 30) {
-      this.setData({
-        x: x + 1,
-        y: y + 1,
-      });
-    } else {
-      this.setData({
-        x: 30,
-        y: 30
-      });
-    }
-  },
-});
-```
-
-### .acss 示例代码
-```css
-/* API-DEMO page/component/movable-view.acss */
-movable-area {
-  height: 400rpx;
-  width: 400rpx;
-  margin: 50rpx 0rpx 0 50rpx;
-  background-color: #ccc;
-  overflow: hidden;
-}
-movable-view {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 200rpx;
-  width: 200rpx;
-  background: #108ee9;
-  color: #fff;
-}
-.max {
-  width: 600rpx;
-  height: 600rpx;
-}
-```
+[小程序在线](https://opendocs.alipay.com/openbox/mini/opendocs/basic-component?view=preview&defaultPage=pages/movable-view/index&defaultOpenedFiles=pages/movable-view/index&theme=light)
 
 ## 属性说明
+
 | **属性** | **类型** | **描述** |
 | --- | --- | --- |
 | direction | String | movable-view 的移动方向，属性值有 `all`、`vertical`、`horizontal`、`none`。<br />**默认值：** none |
@@ -147,14 +48,15 @@ movable-view {
 | onScale | EventHandle | 缩放过程中触发的事件，`event.detail = {x, y, scale`}。<br />**版本要求：** 基础库 [1.20.0](https://opendocs.alipay.com/mini/framework/compatibility) 及以上 |
 
 ### onChange 返回值 detail.source
+
 source 字段表示产生移动的原因
 
-| **属性** | **描述** |
-| --- | --- |
-| touch | 拖动。 |
-| touch-out-of-bounds | 超出移动范围。 |
-| out-of-bounds | 超出移动范围后的回弹。 |
-| friction | 惯性。 |
-| 空字符串 | setData。 |
+| **属性**            | **描述**               |
+| ------------------- | ---------------------- |
+| touch               | 拖动。                 |
+| touch-out-of-bounds | 超出移动范围。         |
+| out-of-bounds       | 超出移动范围后的回弹。 |
+| friction            | 惯性。                 |
+| 空字符串            | setData。              |
 
 **说明：** 冒泡事件，请查看 [**事件介绍**](https://opendocs.alipay.com/mini/framework/events) 中的 **事件类型**。

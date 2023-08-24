@@ -1,28 +1,35 @@
 # 简介
 
-**my.canIUse** 是判断当前小程序的 API、入参或返回值、组件、属性等在当前版本是否支持的 API。
+**my.canIUse** 是判断小程序的 API、入参或返回值、组件、属性等是否在当前版本可用的 API。
 
 ## 使用限制
 
 此 API 支持个人支付宝小程序、企业支付宝小程序使用。
 
 # 接口调用
+
 ## 示例代码
+
 ### .js 示例代码
 
 ```javascript
-// getFileInfo 接口是否可用
-my.canIUse('getFileInfo')
-// closeSocket 接口的参数是否包含 code
-my.canIUse('closeSocket.object.code')
-// getLocation 接口的参数是否包含 type
-my.canIUse('getLocation.object.type')
-// getSystemInfo 接口的返回值是否包含 brand
-my.canIUse('getSystemInfo.return.brand')
+// 接口 getFileInfo 是否可用
+my.canIUse('getFileInfo');
+// 接口 closeSocket 是否有返回值
+my.canIUse('closeSocket.return');
+// 接口 closeSocket 的入参是否包含 code
+my.canIUse('closeSocket.object.code');
+// 接口 getLocation 的返回值是否包含 type
+my.canIUse('getLocation.return.type');
+// 接口 getSystemInfo 的回调中是否包含 brand
+my.canIUse('getSystemInfo.callback.brand');
+
 // 组件 lifestyle（关注生活号）是否可用
-my.canIUse('lifestyle')
-// button 组件的 open-type 属性的值是否可以为 share
-my.canIUse('button.open-type.share')
+my.canIUse('lifestyle');
+// 组件 button 是否包含 open-type 属性
+my.canIUse('button.open-type');
+// 组件 button 的 open-type 属性的值是否可以为 share
+my.canIUse('button.open-type.share');
 ```
 
 ## 入参
@@ -42,6 +49,6 @@ my.canIUse('button.open-type.share')
 
 ## 返回值
 
-| **属性** | **类型** | **描述** |
-| --- | --- | --- |
-| 是否支持 | Boolean | true 表示支持，false 表示不支持。 |
+| **类型** | **描述**                          |
+| -------- | --------------------------------- |
+| Boolean  | 当前版本是否可用，true 表示可用，false 表示不可用。 |

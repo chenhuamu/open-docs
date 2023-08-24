@@ -1,19 +1,21 @@
-
 # 简介
+
 **my.onBLEConnectionStateChanged** 是监听低功耗蓝牙连接的错误事件的 API，包括设备丢失，连接异常断开等。
 
 ## 使用限制
 
-- 支付宝客户端 10.0.18 或更高版本，若版本较低，建议采取 [兼容处理](/mini/framework/compatibility)。
+- 支付宝客户端 10.0.18 或更高版本，若版本较低，建议采取 [兼容处理](/mini/framework/compatibility)。
 - 支持 iOS 客户端，Android 5.0 及以上版本客户端。
 - IDE 模拟器暂不支持调试，请以真机调试结果为准。
 - 为防止多次事件监听导致一次事件多次回调的情况，建议每次调用 on 方法监听事件之前，先调用 off 方法，关闭之前的事件监听。
 - 此 API 暂仅支持企业支付宝小程序使用。
 
 ## 扫码体验
+
 ![|127x157](https://gw.alipayobjects.com/zos/skylark-tools/public/files/5eea5f79eac9a4d0353af9fec979e751.jpeg#align=left&display=inline&height=157&margin=%5Bobject%20Object%5D&originHeight=157&originWidth=127&status=done&style=stroke&width=127)
 
 ## 效果示例
+
 ![|723x407](https://gw.alipayobjects.com/zos/skylark-tools/public/files/bcdb8fb2b7b32dcc667887d8177ca13e.png#align=left&display=inline&height=420&margin=%5Bobject%20Object%5D&originHeight=720&originWidth=1280&status=done&style=stroke&width=746)
 
 # 接口调用
@@ -21,26 +23,29 @@
 ## 示例代码
 
 ### .acss 示例代码
+
 ```css
 /* .acss */
 .help-info {
-  padding:10px;
-  color:#000000;
+  padding: 10px;
+  color: #000000;
 }
 .help-title {
-  padding:10px;
-  color:#FC0D1B;
+  padding: 10px;
+  color: #fc0d1b;
 }
 ```
 
 ### .json 示例代码
+
 ```json
 {
-    "defaultTitle": "Bluetooth"
+  "defaultTitle": "Bluetooth"
 }
 ```
 
 ### .axml 示例代码
+
 ```html
 <!-- .axml-->
 <view class="page">
@@ -86,13 +91,13 @@
 ```
 
 ### .js 示例代码
+
 ```javascript
 // .js
 Page({
   data: {
     devid: '0D9C82AD-1CC0-414D-9526-119E08D28124',
     serid: 'FEE7',
-    notifyId: '36F6',
     writeId: '36F5',
     charid: '',
     alldev: [{ deviceId: '' }],
@@ -141,7 +146,7 @@ Page({
     my.startBluetoothDevicesDiscovery({
       allowDuplicatesKey: false,
       success: () => {
-        my.onBluetoothDeviceFound((res) => {
+        my.onBluetoothDeviceFound(res => {
           var deviceArray = res.devices;
           for (var i = deviceArray.length - 1; i >= 0; i--) {
             var deviceObj = deviceArray[i];
@@ -297,7 +302,7 @@ Page({
         my.readBLECharacteristicValue({
           deviceId: this.data.devid,
           serviceId: this.data.serid,
-          characteristicId: this.data.notifyId,
+          characteristicId: this.data.charid,
           //1、安卓读取服务
           // serviceId:'0000180d-0000-1000-8000-00805f9b34fb',
           // characteristicId:'00002a38-0000-1000-8000-00805f9b34fb',
@@ -353,10 +358,10 @@ Page({
           state: true,
           deviceId: this.data.devid,
           serviceId: this.data.serid,
-          characteristicId: this.data.notifyId,
+          characteristicId: this.data.charid,
           success: () => {
             //监听特征值变化的事件
-            my.onBLECharacteristicValueChange((res) => {
+            my.onBLECharacteristicValueChange(res => {
               my.alert({ content: '得到响应数据 = ' + res.value });
             });
             my.alert({ content: '监听成功' });
@@ -373,7 +378,9 @@ Page({
   },
   //其他事件
   bluetoothAdapterStateChange() {
-    my.onBluetoothAdapterStateChange(this.getBind('onBluetoothAdapterStateChange'));
+    my.onBluetoothAdapterStateChange(
+      this.getBind('onBluetoothAdapterStateChange')
+    );
   },
   onBluetoothAdapterStateChange(res) {
     if (res.error) {
@@ -383,7 +390,9 @@ Page({
     }
   },
   offBluetoothAdapterStateChange() {
-    my.offBluetoothAdapterStateChange(this.getBind('onBluetoothAdapterStateChange'));
+    my.offBluetoothAdapterStateChange(
+      this.getBind('onBluetoothAdapterStateChange')
+    );
   },
   getBind(name) {
     if (!this[`bind${name}`]) {
@@ -402,7 +411,9 @@ Page({
     }
   },
   offBLEConnectionStateChanged() {
-    my.offBLEConnectionStateChanged(this.getBind('onBLEConnectionStateChanged'));
+    my.offBLEConnectionStateChanged(
+      this.getBind('onBLEConnectionStateChanged')
+    );
   },
   onUnload() {
     this.offBLEConnectionStateChanged();
@@ -414,9 +425,10 @@ Page({
 ```
 
 ## 入参
+
 Function 类型。callback 回调函数入参为 Object 类型，属性如下：
 
 | **属性** | **类型** | **描述** |
 | --- | --- | --- |
-| deviceId | String | 蓝牙设备 ID，参考 device 对象。 |
+| deviceId | String | 蓝牙设备 ID。Android 上为设备 MAC 地址，iOS 上为设备 UUID。 |
 | connected | Boolean | 连接目前的状态。 |

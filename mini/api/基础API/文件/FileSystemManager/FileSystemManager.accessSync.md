@@ -1,21 +1,22 @@
 # 简介
+
 [FileSystemManager.access](https://opendocs.alipay.com/mini/api/0226oe) 的同步版本。
 
 ## 使用限制
 
 - 基础库 [2.7.4](https://opendocs.alipay.com/mini/framework/lib-upgrade-v2) 开始支持，低版本需要做 [兼容处理](https://opendocs.alipay.com/mini/framework/compatibility)。
 - 此 API 支持个人支付宝小程序、企业支付宝小程序使用。
-- 使用此 API 前，请先在开放平台控制台 **创建小程序**、**添加能力**，可查看 [接入准备](https://opendocs.alipay.com/mini/02pk4y) 。
-- 此 API 暂不支持在 IDE 模拟器上测试，开发中请使用 [真机调试](https://opendocs.alipay.com/mini/ide/remote-debug) 进行测试。
+- 小程序开发者工具（IDE）暂不支持调试此 API，请使用 [真机调试](https://opendocs.alipay.com/mini/ide/remote-debug) 功能在真机进行调试。
 
 # 接口调用
 
 ## 示例代码
 
 ### .js 示例代码
+
 ```javascript
 let fs = my.getFileSystemManager();
-let result =  fs.accessSync(`${my.env.USER_DATA_PATH}/test.txt`);
+let result = fs.accessSync(`${my.env.USER_DATA_PATH}/test.txt`);
 console.log(result);
 ```
 
@@ -23,10 +24,11 @@ console.log(result);
 
 ### String path
 
-要判断是否存在的文件/目录路径。
+当前小程序[文件系统](https://opendocs.alipay.com/mini/03dt4s) 中的文件夹路径或者文件路径
 
 ## 错误码
-| **错误码** | **说明** |
-| --- | --- |
-| 10022 | 文件 / 目录不存在。 |
-| 10024 | 传入的路径没有读的权限。 |
+
+| **错误码** | **说明**                 |
+| ---------- | ------------------------ |
+| 10022      | 文件 / 目录不存在。      |
+| 10024      | 传入的路径没有读的权限。 |

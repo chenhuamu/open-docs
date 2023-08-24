@@ -20,6 +20,7 @@
 ![|723x756](http://mdn.alipayobjects.com/afts/img/A*FoPBTqHoP1sAAAAAAAAAAABkAa8wAA/original?bz=openpt_doc&t=ahoz2azNPv_9wUCIO3OU3wAAAABkMK8AAAAA#align=left&display=inline&height=887&margin=%5Bobject%20Object%5D&originHeight=887&originWidth=848&status=done&style=stroke&width=848)
 
 # 蓝牙 API
+
 <table>
   <tr>
     <th><b>蓝牙类型</b></th>
@@ -27,7 +28,7 @@
     <th><b>功能说明</b></th>
   </tr>
   <tr>
-    <td rowspan="16">低功耗蓝牙</td>
+    <td rowspan="15">低功耗蓝牙</td>
     <td><a href="https://opendocs.alipay.com/mini/api/tmew6e">my.connectBLEDevice</a></td>
     <td>连接低功耗蓝牙设备。</td>
   </tr>
@@ -45,11 +46,11 @@
   </tr>
   <tr>
     <td><a href="https://opendocs.alipay.com/mini/api/fmg9gg">my.getBLEDeviceCharacteristics</a></td>
-    <td>获取蓝牙设备所有 characteristic（特征值）。</td>
+    <td>获取低功耗蓝牙设备某个服务中所有特征（characteristic）。</td>
   </tr>
   <tr>
     <td><a href="https://opendocs.alipay.com/mini/api/uzsg75">my.getBLEDeviceServices</a></td>
-    <td>获取所有已发现的蓝牙设备，包括已经和本机处于连接状态的设备。</td>
+    <td>获取指定低功耗蓝牙设备所有服务列表。</td>
   </tr>
   <tr>
     <td><a href="https://opendocs.alipay.com/mini/api/my.getbledevicerssi">my.getBLEDeviceRSSI</a></td>
@@ -82,10 +83,6 @@
   <tr>
     <td><a href="https://opendocs.alipay.com/mini/api/vmp2r4">my.writeBLECharacteristicValue</a></td>
     <td>向低功耗蓝牙设备特征值中写入数据。</td>
-  </tr>
-  <tr>
-    <td><a href="https://opendocs.alipay.com/mini/02pexh">my.showBLEPermissionGuide</a></td>
-    <td>蓝牙统一授权/开关引导流程。</td>
   </tr>
   <tr>
     <td><a href="https://opendocs.alipay.com/mini/02pdp9">my.getBLEDeviceStatus</a></td>
@@ -180,36 +177,37 @@
 </table>
 
 # 示例代码
+
 ```javascript
 //初始化
 my.openBluetoothAdapter({
-  success: (res) => {
+  success: res => {
     console.log(res);
   },
 });
 //注册发现事件
-my.onBluetoothDeviceFound((res) => {
+my.onBluetoothDeviceFound(res => {
   let device = res.devices[0];
   //连接发现的设备
   my.connectBLEDevice({
     deviceId: device.deviceId,
-    success: (res) => {
+    success: res => {
       console.log(res);
     },
-    fail: (res) => {},
-    complete: (res) => {},
+    fail: res => {},
+    complete: res => {},
   });
   //停止搜索
   my.stopBluetoothDevicesDiscovery({
-    success: (res) => {
+    success: res => {
       console.log(res);
     },
-    fail: (res) => {},
-    complete: (res) => {},
+    fail: res => {},
+    complete: res => {},
   });
 });
 //注册连接事件
-my.onBLEConnectionStateChanged((res) => {
+my.onBLEConnectionStateChanged(res => {
   console.log(res);
   if (res.connected) {
     //开始读写notify等操作
@@ -217,35 +215,35 @@ my.onBLEConnectionStateChanged((res) => {
       deviceId: deviceId,
       serviceId: serviceId,
       characteristicId: characteristicId,
-      success: (res) => {
+      success: res => {
         console.log(res);
       },
-      fail: (res) => {},
-      complete: (res) => {},
+      fail: res => {},
+      complete: res => {},
     });
   }
 });
 //注册接收read或notify的数据
-my.onBLECharacteristicValueChange((res) => {
+my.onBLECharacteristicValueChange(res => {
   console.log(res);
 });
 //开始搜索
 my.startBluetoothDevicesDiscovery({
-  services: ["fff0"],
-  success: (res) => {
+  services: ['fff0'],
+  success: res => {
     console.log(res);
   },
-  fail: (res) => {},
-  complete: (res) => {},
+  fail: res => {},
+  complete: res => {},
 });
 //断开连接
 my.disconnectBLEDevice({
   deviceId: deviceId,
-  success: (res) => {
+  success: res => {
     console.log(res);
   },
-  fail: (res) => {},
-  complete: (res) => {},
+  fail: res => {},
+  complete: res => {},
 });
 //注销事件
 my.offBluetoothDeviceFound();
@@ -253,8 +251,8 @@ my.offBLEConnectionStateChanged();
 my.offBLECharacteristicValueChange();
 //退出蓝牙模块
 my.closeBluetoothAdapter({
-  success: (res) => {},
-  fail: (res) => {},
-  complete: (res) => {},
+  success: res => {},
+  fail: res => {},
+  complete: res => {},
 });
 ```

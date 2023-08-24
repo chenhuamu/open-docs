@@ -1,14 +1,13 @@
 # 简介
 
-**my.createInnerAudioContext** 是在小程序内创建并返回内部音频（与背景音频相对应） InnerAudioContext 对象的 API。内部音频即“前景音频”，当用户离开小程序（或屏幕息屏）时音频停止播放。
+**my.createInnerAudioContext** 是在小程序内创建并返回内部音频（与背景音频相对应） InnerAudioContext 对象的 API，内部音频即“前景音频”，当用户离开小程序（或屏幕息屏）时音频停止播放。
 
-更多信息，请参见 [音频播放](https://opendocs.alipay.com/mini/00d6hx)。
+更多信息，可查看 [音频播放 API 使用说明](https://opendocs.alipay.com/mini/03l3fn)。
 
 ## 使用限制
 
 - 基础库 [1.23.4](https://opendocs.alipay.com/mini/framework/lib) 或更高版本；支付宝客户端 10.1.87 或更高版本，若版本较低，建议采取 [兼容处理](https://opendocs.alipay.com/mini/framework/compatibility)。
-- IDE 模拟器暂不支持调试，请以真机调试结果为准。
-- 使用此 API 前，请先在开放平台控制台 **创建小程序**、**添加能力**，否则将导致音频无法播放且没有错误提示，可查看 [接入准备](https://opendocs.alipay.com/mini/02p19p)。
+- 小程序开发者工具（IDE）暂不支持调试此 API，请使用 [真机调试](https://opendocs.alipay.com/mini/ide/remote-debug) 功能在真机进行调试。
 - 此 API 支持个人支付宝小程序、企业支付宝小程序使用。
 
 # 接口调用
@@ -23,8 +22,12 @@
 <view class="operation-item" onTap="pause">暂停</view>
 <view class="operation-item" onTap="stop">停止</view>
 <view class="operation-item" onTap="seek">播放进度跳转</view>
-<view class="operation-item" onTap="offAudioInterruptionBegin">取消监听音频因为系统占用而被中断的开始事件</view>
-<view class="operation-item" onTap="offAudioInterruptionEnd">取消监听音频被中断的结束事件</view>
+<view class="operation-item" onTap="offAudioInterruptionBegin"
+  >取消监听音频因为系统占用而被中断的开始事件</view
+>
+<view class="operation-item" onTap="offAudioInterruptionEnd"
+  >取消监听音频被中断的结束事件</view
+>
 ```
 
 第二步：开发者获取前景音乐 InnerAudioContext 对象后，添加属性并注册对应监听事件。
@@ -33,9 +36,9 @@
 //.js
 onLoad(){
   //创建前景音频上下文对象。
-  this.innerAudioContext = my.createInnerAudioContext(); 
+  this.innerAudioContext = my.createInnerAudioContext();
   //来源于优酷的音频码，用于直接播放。支持音频格式：AAC，MP3。如果开发者不传入音频码，控制台不会报错，但无音频播放。
-  this.innerAudioContext.src = '音频src'; 
+  this.innerAudioContext.src = 'XNDY2NTE2MjE4NA==';
   //是否自动开始播放，默认为 false。
   this.innerAudioContext.autoplay = false;
   //是否循环播放，默认为 false。
@@ -121,13 +124,13 @@ offAudioInterruptionEnd(){
 
 | **属性** | **类型** | **是否只读** | **说明** |
 | --- | --- | --- | --- |
-| src | String | 否 | 音频码，用于直接播放。支持音频格式：AAC，MP3。如果开发者不传入音频码，控制台不会报错，但无音频播放。                                  <br />**注意**：只支持来源于优酷的音频码，如何获取音频码请参考文末帮助。 |
+| src | String | 否 | 音频码，用于直接播放。支持音频格式：AAC，MP3。如果开发者不传入音频码，控制台不会报错，但无音频播放。 <br />**注意**：只支持来源于优酷的音频码，如何获取音频码请参考文末帮助。 |
 | startTime | Number | 否 | 开始播放的位置，单位为秒（s），默认从 0 开始播放。 |
 | autoplay | Boolean | 否 | 是否自动开始播放，默认为 false。 |
 | loop | Boolean | 否 | 是否循环播放，默认为 false。 |
 | obeyMuteSwitch | Boolean | 否 | 是否遵循系统静音开关，当此参数为 false 时，即使用户打开了静音开关，也能继续发出声音，默认值为 true。<br />**注意**：此参数仅 iOS 支持。 |
 | duration | Number | 是 | 当前音频的长度，单位为秒（s），只有在当前有合法的 src 时返回。 |
-| currentTime | Number | 是 | 当前音频的播放位置，单位为秒（s），**该值为浮点数**，只有在当前有合法的 src 时返回。|
+| currentTime | Number | 是 | 当前音频的播放位置，单位为秒（s），**该值为浮点数**，只有在当前有合法的 src 时返回。 |
 | paused | Boolean | 是 | 当前是否为暂停或停止状态，true 表示暂停或停止，false 表示正在播放。 |
 | buffered | Number | 是 | 音频缓冲的时间点，仅保证当前播放时间点到此时间点内容已缓冲。 |
 | volume | Number | 否 | 音量。范围 0~1。例如：`this.innerAudioContext.volume = 0.5` |
@@ -169,7 +172,7 @@ offAudioInterruptionEnd(){
 
 ```javascript
 this.innerAudioContext = my.createInnerAudioContext();
-this.innerAudioContext.onError((error) => {
+this.innerAudioContext.onError(error => {
   console.log('error ' + JSON.stringify(error));
 });
 ```
@@ -178,10 +181,10 @@ error 为一个对象，示例如下：
 
 ```json
 {
-    "data": {
-        "errCode": 10007,
-        "errMsg": "xxxxx"
-    }
+  "data": {
+    "errCode": 10007,
+    "errMsg": "xxxxx"
+  }
 }
 ```
 
@@ -197,18 +200,19 @@ error 为一个对象，示例如下：
 ## 常见问题 FAQ
 
 ### Q：进入页面播放音频，返回上一页后重新进入播放页面，为何 onTimeUpdate 等监听事件失效不执行？
+
 A：onTimeUpdate 等监听事件在再次进入页面时失效不执行，二次进入界面的时候消息没办法传递出去，导致页面出错没有更新页面数据。
 
 所以建议把之前的音频监听事件全部都 off 处理，然后再重新监听。
 
 ### Q: 优酷音频码如何获取？
 
-A: 请参考 [音频播放能力介绍](https://opendocs.alipay.com/mini/00d6hx)。
+A: 可查看 [音频播放 API 使用说明](https://opendocs.alipay.com/mini/03l3fn)。
 
-> 小程序音频播放能力仅支持播放优酷的音频源，开发者需要使用 平台入驻 后的支付宝账号登录优酷，并将音频 [上传优酷](https://mp.youku.com/new/upload_home) 以获取音频码，具体方法见 [接入指南](https://opendocs.alipay.com/mini/02p19q) 的第一步。
+> 小程序音频播放能力仅支持播放优酷的音频源，开发者需要使用 **平台入驻** 后的支付宝账号登录优酷，并将音频 [上传优酷](https://mp.youku.com/new/upload_home) 以获取音频码，具体方法见 **音频播放 API 使用说明** 的 **上传音频** 步骤。
 
 ### Q: 我确认我的音频码是有效的，但播放报错 10007？
 
-A: 请按 [音频播放 - 接入指南](https://opendocs.alipay.com/mini/02p19q) 的流程一步步操作上传音频。不能直接使用上传到优酷官网的音频码。
+A: 请按 **音频播放 API 使用说明** 的 **上传音频** 步骤一步步上传音频。不能直接使用上传到优酷官网的音频码。
 
 请注意：请使用开发小程序的支付宝主账号登录优酷。

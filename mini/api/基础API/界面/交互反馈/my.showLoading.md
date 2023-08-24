@@ -1,7 +1,9 @@
 # 简介
-**my.showLoading** 是显示加载提示的过渡效果的 API，可与 [my.hideLoading](https://opendocs.alipay.com/mini/api/nzf540) 配合使用。
+
+**my.showLoading** 是显示 Loading 提示框的 API，可与 [my.hideLoading](https://opendocs.alipay.com/mini/api/nzf540) 配合使用。
 
 ## 使用限制
+
 此 API 支持个人支付宝小程序、企业支付宝小程序使用。
 
 ## 扫码体验
@@ -10,32 +12,9 @@
 
 # 接口调用
 
-## 示例
+## 在线示例
 
-[小程序在线](https://opendocs.alipay.com/examples/3c03908e-51e5-4a4a-bca3-2800a317c0a5) 
-
-### .json 示例代码
-
-```json
-{
-  "defaultTitle": "加载提示"
-}
-```
-
-### .axml 示例代码
-```html
-<!-- API-DEMO page/API/loading/loading.axml-->
-<view class="page">
-  <view class="page-section">
-    <view class="page-section-title">
-      显示 loading 后，会覆盖整个h5页面，页面元素不能交互。
-    </view>
-    <view class="page-section-btns">
-      <view onTap="showLoading">显示加载提示</view>
-    </view>
-  </view>
-</view>
-```
+[小程序在线](https://opendocs.alipay.com/openbox/mini/opendocs/loading?view=preview&defaultPage=pages/index/index&defaultOpenedFiles=pages/index/index&theme=light)
 
 ### .js 示例代码
 
@@ -45,7 +24,7 @@ Page({
   showLoading() {
     my.showLoading({
       content: '加载中...',
-      delay: 1000,
+      delay: 1000
     });
     setTimeout(() => {
       my.hideLoading();
@@ -54,29 +33,14 @@ Page({
 });
 ```
 
-### .acss 示例代码
-
-```css
-/* API-DEMO page/API/loading/loading.acss */
-.tips{
-  margin-left: 10px;
-  margin-top: 20px; 
-  color: red;
-  font-size: 12px;
-}
-.tips .item {
-  margin: 5px 0;
-  color: #888888;
-  line-height: 14px;
-}
-```
-
 ## 入参
+
 Object 类型，参数如下：
 
 | **参数** | **类型** | **必填** | **描述** |
 | --- | --- | --- | --- |
 | content | String | 否 | 提示中的文字内容。 |
+| mask | Boolean | 否 | 是否显示透明蒙层，防止触摸穿透。<br />**默认值**：true |
 | delay | Number | 否 | 延迟显示，单位为毫秒（ms），默认值为 0。<br />如果在此时间之前调用了 **my.hideLoading** 则不会显示。 |
 | success | Function | 否 | 调用成功的回调函数。 |
 | fail | Function | 否 | 调用失败的回调函数。 |

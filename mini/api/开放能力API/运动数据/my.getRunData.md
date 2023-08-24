@@ -1,129 +1,128 @@
 # 简介
-**my.getRunData** 是获取用户一个自然天内的运动步数信息的 API。详情可查看 [运动数据](https://opendocs.alipay.com/mini/introduce/rundata) 能力介绍。
+**my.getRunData** 是获取用户某一个自然天内运动步数的 API。目前只支持查询最近 30 天内的运动步数，若超过 30 天，则返回的步数为 0。
 
-调用本 API 时无需再接入授权 API，系统将自动会检查用户是否已授权。若用户尚未授权，则会弹出授权框；用户同意授权后，可获取到返回的加密数据。 然后在服务端结合签名算法和 AES 密钥进行解密，获取运动数据，方法可查看 [接口内容加密方式](https://opendocs.alipay.com/common/02mse3)。
+此 API 是运动数据产品的一部分，调用之前请确保完成以下步骤：
+
+**第一步**：绑定 **运动数据** 产品并登录 **主账号** 进行 **用户信息申请**。登录支付宝 [开放平台控制台](https://open.alipay.com/dev/workspace) -> 选择需要配置的小程序，点击进入详情页 -> **产品绑定** -> **绑定产品**，选择 **运动数据** 并添加 -> 回到产品绑定页面，找到 **运动数据**，点击 **用户信息申请**，申请 my.queryStepDailyCount 权限。如果申请用户信息按钮为灰色，请检查小程序是否设置主营行业，并且对照以下文档检查应用是否符合主营行业及字段使用场景的要求：[用户信息申请及使用基础规则](https://opendocs.alipay.com/common/02kkuu) 。
+
+**第二步**：配置接口加签方式以及接口内容加密方式。配置有以下两个入口：
+- 登录支付宝 [开放平台控制台](https://open.alipay.com/dev/workspace) -> 选择需要配置的小程序，点击进入详情页 -> 开发设置 -> 点击 **接口内容加密方式、接口加签方式** 对应的 **设置**，按照页面指引进行配置即可。
+- 登录支付宝 [开放平台控制台](https://open.alipay.com/dev/workspace) > **账户中心** > **密钥管理** > [**开放平台密钥**](https://openhome.alipay.com/dev/workspace/key-manage) > 找到需要配置的小程序 > 点击 **接口内容加密方式、接口加签方式** 对应的 **设置**，按照页面指引进行配置即可。
+
+以上两步均完成之后，调用 my.getRunData 可以获取到加密后的运动数据，通过网络请求（如 my.request）将加密数据传给开发者服务端，开发者服务端使用 [AES 密钥](https://opendocs.alipay.com/common/02mse3) 对加密后的运动数据进行解密，获取到运动步数数据。为确保数据完整性，开发者服务端也可通过 [签名算法](https://opendocs.alipay.com/common/02mriz) 对所收到的数据进行验签。
 
 ## 使用限制
 
-- 目前只支持查询最近 30 天内的运动数据，若超过 30 天，则返回的步数信息为 0。
-- 基础库 [1.17.1](https://opendocs.alipay.com/mini/framework/lib) 或更高版本；支付宝客户端 10.1.60 或更高版本，若版本较低，建议采取 [兼容处理](https://opendocs.alipay.com/mini/framework/compatibility)。
-- IDE 模拟器暂不支持调试，请以真机调试结果为准。
+- 基础库 [1.17.1](https://opendocs.alipay.com/mini/framework/lib) 或更高版本；支付宝客户端 10.1.60 或更高版本，若版本较低，建议采取 [兼容处理](https://opendocs.alipay.com/mini/framework/compatibility)。
 - 此 API 暂仅支持企业支付宝小程序使用。
+- IDE 模拟器暂不支持调试，请以真机调试结果为准。
 
 # 接口调用
-
 ## 示例代码
-
-### .js 示例代码
 ```javascript
-// .js
 my.getRunData({
-  countDate: '2018-12-19',
-  fail: (res) => {
-    console.log('get pedometer encrypted fail:'+JSON.stringify(res))
+  // 替换为最近三十天内某一天的日期
+  countDate: '2022-06-27',
+  fail: res => {
+    console.log('get pedometer encrypted fail:' + JSON.stringify(res));
   },
-  success: (res) => {
-    let that = this;
-    console.log('get pedometer encrypted success:'+JSON.stringify(res))
-    my.request({
-      url: 'http://www.telmo.cn/gateway/decrypt',
-      data: {
-        encryptContent: res.response
-      },
-      success: function(res) {
-        console.log('decrypt pedometer success:'+JSON.stringify(res))
-        that.setData({
-          step: res.data.count
-        })
-      },
-      fail: function(res) {
-        console.log('decrypt pedometer fail:'+JSON.stringify(res))
-      }
-    })
+  success: res => {
+    console.log('get pedometer encrypted success:' + JSON.stringify(res));
+    // 如果 response 为 String 类型 则为加密报文
+    // 如果 response 为 Object 类型且抛出异常信息，则为加密异常
+    const { response = '' } = res;
+    if(typeof response === 'string') {
+      my.request({
+        // 替换为开发者自己的服务端接口进行解密
+        url: 'http://www.telmo.cn/gateway/decrypt',
+        data: {
+          encryptContent: response,
+        },
+        success: function (res) {
+          console.log('decrypt pedometer success:' + JSON.stringify(res));
+        },
+        fail: function (res) {
+          console.log('decrypt pedometer fail:' + JSON.stringify(res));
+        },
+      });
+    } else {
+      // 根据错误信息进行排查
+      my.alert({ message: JSON.stringify(response) });
+    }
   },
-  complete: (res) => {
-    console.log('getRunData complete:' + JSON.stringify(res))
-  }
-})
+  complete: res => {
+    console.log('getRunData complete:' + JSON.stringify(res));
+  },
+});
 ```
+## 入参
+Object 类型，参数如下：
 
-## 返回示例
+| **参数** | **类型** | **必填** | **描述** |
+| --- | --- | --- | --- |
+| countDate | String | 是 | 要查询的步数日期（yyyy-mm-dd）的字符串例如：`countDate: '2018-12-19'`。 |
+| fail | Function | 否 | 调用失败的回调函数。 |
+| success | Function | 否 | 调用成功的回调函数。 |
+| complete | Function | 否 | 调用结束的回调函数（调用成功、失败都会执行）。 |
 
-返回值 res.response 为完整的报文数据，前端需要将该报文发送到开发者服务端做验签和解密处理（详细的服务端处理流程可查看 **接口内容加密方式**，服务端解密后的明文示例如下：
+## success 回调返回值
+Object 类型，参数如下：
 
-#### 正常响应
+| **属性** | **类型** | **描述** |
+| --- | --- | --- |
+| response | String / Object   | 如果返回值为 String 类型，则为 **经过加密的指定日期的步数数据**，需要通过 [my.request](https://opendocs.alipay.com/mini/api/owycmh) 请求解密运动数据。<br /> 如果为 Object 类型且返回异常报错信息，则为加密异常。 |
+
+#### 加密异常 response 返回异常信息
+数据格式如下：
 ```json
 {
-    "count": "16880",
-    "countDate": "2018-12-19",
-    "code": "10000"
+  "code": "40003",
+  "msg": "Insufficient Conditions",
+  "subCode": "isv.invalid-auth-relations",
+  "subMsg": "无效的授权关系"
+},
+```
+错误码穷举如下：
+| 系统级错误码（code） | 系统级错误描述（msg） | 业务级错误码（subCode） | 业务级错误描述（subMsg） | 解决方案 |
+| --- | --- | --- | --- | --- |
+| 20000 | Service Currently Unavailable | aop.unknow-error | 系统繁忙。 | 稍后再试。 |
+| 40001 | Missing Required Arguments  | isv.missing-encrypt-key | 缺少加密配置 | 按照简介说明配置 **接口内容加密方式** |
+| 40001 | Missing Required Arguments | isv.missing-default-signature-type" | 应用未设置默认签名类型 | 重新保存下开发者的密钥，或者设置下小程序的应用网关地址 |
+| 40002 | Invalid Arguments  | isv.invalid-encrypt | 加密异常。 | 按文档重新设置AES密钥。 |
+
+## 开发者服务端解密 
+### 解密成功
+数据格式如下：
+```json
+{
+  "count": 16880,
+  "countDate": "2018-12-19",
+  "code": "10000"
+  "msg": "Success"
 }
 ```
-
-#### 服务端接口异常响应
+### 解密异常
+数据格式如下： 
 ```json
 {
     "code": "40003",
     "msg": "Insufficient Conditions",
     "subCode": "isv.invalid-auth-relations",
     "subMsg": "无效的授权关系"
-}
-{
-    "code": "20000",
-    "msg": "Service Currently Unavailable",
-    "subCode": "aop.unknow-error",
-    "subMsg": "系统繁忙"
-}
-{
-    "code": "40001",
-    "msg": "Missing Required Arguments",
-    "subCode": "isv.missing-default-signature-type",
-    "subMsg": "应用未设置默认签名类型"
-}
-//解决方案：重新保存下开发者的密钥，或者设置下小程序的应用网关地址
-{
-    "code": "40002",
-    "msg": "Invalid Arguments",
-    "subCode": "isv.invalid-encrypt",
-    "subMsg": "加密异常"
-}
-//解决方案：按文档重新设置AES密钥
+},
 ```
+错误码穷举如下：
 
-## 入参
+| 系统级错误码（code） | 系统级错误描述（msg） | 业务级错误码（subCode） | 业务级错误描述（subMsg） | 解决方案 |
+| --- | --- | --- | --- | --- |
+| 40006 | Insufficient Permissions | isv.insufficient-isv-permissions | ISV权限不足，建议在开发者中心检查签约是否已经生效。 | 小程序产品绑定。登录支付宝 [开放平台控制台](https://open.alipay.com/dev/workspace) -> 选择需要配置的小程序，点击进入详情页  -> 产品绑定 -> 找到 **运动数据**，点击 **用户信息申请**，申请 my.queryStepDailyCount 权限，申请规则可查看 [用户信息申请及使用基础规则](https://opendocs.alipay.com/common/02kkuu) 。 |
 
-Object 类型，参数如下：
-
-| **参数** | **类型** | **必填** | **描述** |
-| --- | --- | --- | --- |
-| countDate | String | 是 | 要查询的步数日期（yyyy-mm-dd）的字符串例如：`countDate: '2018-12-19'` 。 |
-| fail | Function | 否 | 调用失败的回调函数。 |
-| success | Function | 否 | 调用成功的回调函数。 |
-| complete | Function | 否 | 调用结束的回调函数（调用成功、失败都会执行）。 |
-
-## 返回值
-| **属性** | **类型** | **描述** |
+## Fail 回调返回值
+| 错误码 | 说明 | 解决方案 |
 | --- | --- | --- |
-| response | String | 查询到的指定日期的步数，该数据是经过加密的，需要通过 [my.request](https://opendocs.alipay.com/mini/api/owycmh) 请求解密数据。 |
+| 2 | 接口参数无效 | 请检查入参是否正确传入。 |
+| 1003 | 未授权支付宝应用计步权限 | 为用户拒绝计步授权，无需进行特殊处理。 |
+| 1005 | 用户未开通支付宝运动功能 | 引导用户按照以下步骤开通：支付宝 APP 首页 **更多** 进入到应用中心页面，找到 **教育公益** 下**运动**，按照页面指引，点击 **同意协议并允许授权** 即可。 |
 
-## 结果码
-| **结果码** | **描述** | **解决方案** |
-| --- | --- | --- |
-| MISSING_PARAMETER | 缺少入参信息。 | 检查步数日期是否传入。 |
-| INVALID_DATE | 传入的查询日期非法。 | countDate 格式为 yyyy-MM-dd 的字符串，请按照描述修正传入的参数。 |
-| INVALID_USER_STATUS | 此用户未开通支付宝运动业务。 | 此支付宝用户未开通支付宝运动业务。<br />需用户在支付宝首页 > **教育公益** > **运动** > **设置** 页面（或直接在支付宝搜索 **运动**）开通支付宝运动业务后才能使用此接口查询用户步数信息。 |
-| INVALID_USERID | userid 非法。 | 入参的 userid 格式错误。<br />**注意**: userid 必须是以 2088 开头的 16 位数字字符串，请修正此参数。 |
-| INVALID_APP_ID | appId 为空。 | 请检查 appid 是否正确 |
 
-# 常见问题 FAQ
 
-## Q：安卓系统下的用户在未开启 my.getRunData 时，调用这个方法为何报错：SYNC getAPPInfo do not execute callback？
-A：这是已知问题，会在基础库 **1.23.0** 版本修复，原因是同步 API 容器底层偶现异常导致，具体发布信息可查看 [基础库更新日志](https://opendocs.alipay.com/mini/ide/framework-changelog)。
-
-## Q：调用 my.getRunData 运动数据为何报错缺少加密配置？
-A：未配置开放平台 AES 密钥导致的报错。
-
-- 登录支付宝 [开放平台控制台](https://open.alipay.com/dev/workspace) > 选择需要配置 AES 密钥的应用，点击进入应用详情页 > **设置** > **开发设置** 页面配置 AES 密钥。
-- 还可在开放平台控制台 **账户中心** > **密钥管理** > **开放平台密钥** > [接口内容加密方式](https://openhome.alipay.com/dev/workspace/key-manage) 找到需配置 AES 加密方式的应用，点击 **设置** 进行配置。
-
-两个入口选择其一即可完成配置，详细说明请 [接口内容加密方式](https://opendocs.alipay.com/common/02mse3)。
