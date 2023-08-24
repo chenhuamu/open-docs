@@ -121,6 +121,6 @@ Page({
 ```css
 /* app.acss */
 .a-customize-tab-bar{
-  z-index：999;
+  z-index: 999;
 }
 ```
